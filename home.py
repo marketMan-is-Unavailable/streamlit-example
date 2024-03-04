@@ -57,16 +57,14 @@ def main():
     #    with st.expander("Show Dataframe"):
     #        st.write(st.session_state.df)
 
-    uploaded_file = st.file_uploader("Upload CSV", type=["csv",".xlsx"])
-    if uploaded_file is not None:
-        if 'df' not in st.session_state:
-            st.session_state.df = pd.read_csv(uploaded_file)            
-            with st.expander("Show Dataframe"):
-                st.write(st.session_state.df)
-                showCounter = True
+    st.session_state.df = pd.read_csv("stlist.csv")            
+    with st.expander("Show Dataframe"):
+        st.write(st.session_state.df)
+            showCounter = True
 
-        
-    _dataCleaningOptionSelectDescribeLoc, _dataCleaningOptionDropRowColumnLoc, _dataCleaningOptionSelectColumnLoc = st.columns(3)
+    
+    _showList, _dataCleaningOptionDropRowColumnLoc, _dataCleaningOptionSelectColumnLoc = st.columns(3)
+
 
     with _dataCleaningOptionDropRowColumnLoc:
         # Multi-selectbox to choose cleaning options
@@ -91,11 +89,9 @@ def main():
             else:
                 st.session_state._finaldf = st.session_state.df        
 
-    with _dataCleaningOptionSelectDescribeLoc:
+    with _showList:
         # Multi-selectbox to choose cleaning options
-        _dataCleaningOptionDescribeData = st.multiselect(
-            'Select Data Describe Option',
-            ('Show Info', 'Describe', 'Show shape', 'Show Columns', 'Count Missing Values(per Column)','Data Profile'))
+        _showListStock = st.multiselect('Select Columns(Drop Column):', st.session_state.df.SYMBOL)
         
     if st.button('Capture State', use_container_width=True):
         try:
