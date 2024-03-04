@@ -2,8 +2,8 @@ import io
 import streamlit as st
 import pandas as pd
 from typing import Union
-from ydata_profiling import ProfileReport
-from streamlit_pandas_profiling import st_profile_report
+#from ydata_profiling import ProfileReport
+#from streamlit_pandas_profiling import st_profile_report
 
 def cleanData(_selectedf, _dataCleaningOptionDropRowColumn, _dataCleaningOptionSelectColumn) -> Union[str, bool]:
     for _options in _dataCleaningOptionDropRowColumn:
@@ -44,47 +44,29 @@ def discussDataFrame(_selectedf, _dataCleaningOptionDescribeData):
         elif _options ==  'Data Profile':
             with st.expander("Expand Data Profile"):
                 pr = _selectedf.profile_report()
-                st_profile_report(pr)
+                #st_profile_report(pr)
         elif _options == 'Count Missing Values(per Column)':
             with st.expander("Missing Values per column"):
                 st.write(_selectedf.isna().sum())
 
 def main():
     st.title('DataFrame Cleaning App')
-    # Upload file
     showCounter = False
-    #if showCounter:
-    #    with st.expander("Show Dataframe"):
-    #        st.write(st.session_state.df)
-
-    st.session_state.df = pd.read_csv("stlist.csv")            
+    st.session_state.df = pd.read_csv("all_info.csv")            
     with st.expander("Show Dataframe"):
         st.write(st.session_state.df)
         showCounter = True
 
-    
-    _showList, _dataCleaningOptionDropRowColumnLoc  = st.columns(2)
+    st.session_state.allinfodf = pd.read_csv("all_info.csv")            
 
+    _showByInd, _showByStock  = st.columns(2)
 
-    with _dataCleaningOptionDropRowColumnLoc:
+    with _showByInd:
         # Multi-selectbox to choose cleaning options
-        _dataCleaningOptionDropRowColumn = st.multiselect(
-            'Select Cleaning Option',
-            ('Show Dataframe', 'Drop Column', 'Drop Duplicates', 'Drop Missing Values',
-             'One Hot Encode','Sort Ascending','Sort Descending'))
-        
-    
-
-    with _showList:
+        _showByIndList = st.multiselect('Select Industry Type:', st.session_state.allinfodf['industry'].unique())        
+    with _showByStock:
         # Multi-selectbox to choose cleaning options
-        _showListStock = st.multiselect('Select Columns(Drop Column):', st.session_state.df.SYMBOL)
-        
-    if st.button('Capture State', use_container_width=True):
-        try:
-            st.session_state.df = st.session_state.df1
-            st.write("Captured State !")
-        except:
-            st.write("Browse/upload file, perform some action !")
+        _showByStockList = st.multiselect('Select Industry Type:', st.session_state.df.columns)   
 
     if st.button('Run', use_container_width=True):
         _cleanData = cleanData(st.session_state._finaldf, _dataCleaningOptionDropRowColumn, _dataCleaningOptionSelectColumn)
