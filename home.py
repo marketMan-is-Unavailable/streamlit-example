@@ -60,7 +60,7 @@ def main():
     st.session_state.df = pd.read_csv("stlist.csv")            
     with st.expander("Show Dataframe"):
         st.write(st.session_state.df)
-            showCounter = True
+        showCounter = True
 
     
     _showList, _dataCleaningOptionDropRowColumnLoc, _dataCleaningOptionSelectColumnLoc = st.columns(3)
