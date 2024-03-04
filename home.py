@@ -63,7 +63,7 @@ def main():
         showCounter = True
 
     
-    _showList, _dataCleaningOptionDropRowColumnLoc, _dataCleaningOptionSelectColumnLoc = st.columns(3)
+    _showList, _dataCleaningOptionDropRowColumnLoc  = st.columns(2)
 
 
     with _dataCleaningOptionDropRowColumnLoc:
@@ -73,21 +73,7 @@ def main():
             ('Show Dataframe', 'Drop Column', 'Drop Duplicates', 'Drop Missing Values',
              'One Hot Encode','Sort Ascending','Sort Descending'))
         
-    with _dataCleaningOptionSelectColumnLoc:
-        # select columns code
-        if uploaded_file is not None:
-            _dataCleaningOptionSelectColumn = st.multiselect('Select Columns(Drop Column):', st.session_state.df.columns)
-            if len(_dataCleaningOptionSelectColumn) == 0:
-                st.session_state._selectedf = st.session_state.df    
-            else:
-                st.session_state._selectedf = st.session_state.df[_dataCleaningOptionSelectColumn]
-            #unselected columns code
-            _unselectedcolumns = [col for col in st.session_state.df.columns if col not in _dataCleaningOptionSelectColumn]
-            st.session_state._unselectedf = st.session_state.df[_unselectedcolumns]
-            if len(_dataCleaningOptionSelectColumn) != 0:
-                st.session_state._finaldf = pd.concat([st.session_state._selectedf, st.session_state._unselectedf], axis=1)
-            else:
-                st.session_state._finaldf = st.session_state.df        
+    
 
     with _showList:
         # Multi-selectbox to choose cleaning options
